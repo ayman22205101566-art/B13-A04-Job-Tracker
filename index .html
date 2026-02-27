@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Application Tracker</title>
+
+  <!-- DaisyUI + Tailwind -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+</head>
+
+<body class="py-14 mx-auto container font-[Geist]">
+  <header>
+    <h1 class="text-3xl text-[#002c5c] font-bold mb-5">Job Application Tracker</h1>
+
+    <nav class="flex justify-between gap-4">
+      <div class="card card-border bg-neutral-50 w-96 border border-gray-200">
+        <div class="card-body">
+          <h2 class="card-title text-sm font-medium">Total</h2>
+          <h2 id="total-count" class="card-title text-2xl font-bold text-[#002C5C]">0</h2>
+        </div>
+      </div>
+
+      <div class="card card-border bg-neutral-50 w-96 border border-gray-200">
+        <div class="card-body">
+          <h2 class="card-title text-sm font-medium">Interview</h2>
+          <h2 id="interview-count" class="card-title text-2xl font-bold text-green-600">0</h2>
+        </div>
+      </div>
+
+      <div class="card card-border bg-neutral-50 w-96 border border-gray-200">
+        <div class="card-body">
+          <h2 class="card-title text-sm font-medium">Rejected</h2>
+          <h2 id="rejected-count" class="card-title text-2xl font-bold text-red-600">0</h2>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <hr class="my-8 text-neutral-200" />
+
+  <main>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl text-[#002c5c] font-semibold">Available Jobs</h2>
+      <p class="font-medium text-sm text-gray-600"><span id="available-jobs">0</span> Jobs</p>
+    </div>
+
+    <!-- Tabs -->
+    <section class="menu-btn flex gap-3 flex-wrap">
+      <button class="btn filter-btn text-gray-600 hover:bg-primary hover:text-white" data-status="all">All</button>
+      <button class="btn filter-btn text-gray-600 hover:bg-primary hover:text-white" data-status="interview" id="interview-section">Interview</button>
+      <button class="btn filter-btn text-gray-600 hover:bg-primary hover:text-white" data-status="rejected" id="rejected-section">Rejected</button>
+    </section>
+
+    <!-- Render jobs here -->
+    <div id="post-container"></div>
+
+    <!-- Empty state -->
+    <section id="no-jobs-section" class="px-10 py-[60px] my-4 border border-gray-200 bg-neutral-50 rounded-lg hidden">
+      <div class="flex flex-col justify-center items-center text-center my-10">
+        <img class="mb-5" src="jobs.png" alt="No jobs icon" />
+        <h2 class="text-2xl text-black font-semibold mb-1">No jobs available</h2>
+        <p class="text-base text-gray-600">Check back soon for new job opportunities</p>
+      </div>
+    </section>
+
+    <!-- Job card template  -->
+    <template id="jobCardTemplate">
+      <section class="p-6 my-4 border border-gray-200 bg-neutral-50 rounded-lg">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="company-name text-xl font-semibold text-[#002c5c] mb-1"></h3>
+            <p class="job-title text-lg text-gray-600 mb-5"></p>
+          </div>
+          <button class="mobile-del btn rounded-full p-0" type="button">
+            <img src="Group 1.png" alt="Delete" />
+          </button>
+        </div>
+
+        <p class="job-meta text-base text-gray-600 my-5"></p>
+
+        <button class="not-applied btn btn-soft text-gray-950 mb-2" type="button">NOT APPLIED</button>
+
+        <p class="job-desc text-base text-gray-950 mb-5"></p>
+
+        <div class="flex gap-3 flex-wrap">
+          <button class="interview-btn btn text-success border-success hover:bg-success hover:text-white" type="button">
+            INTERVIEW
+          </button>
+          <button class="rejected-btn btn text-error border-error hover:bg-error hover:text-white" type="button">
+            REJECTED
+          </button>
+        </div>
+      </section>
+    </template>
+  </main>
+
+  
+  <script src="job code .js"></script>
+
+  <!-- Render script -->
+  <script>
+    const jobs = [
+      {
+        company: "Mobile First Corp",
+        title: "React Native Developer",
+        meta: "Remote • Full-time • $130,000 - $175,000",
+        desc: "Build cross-platform mobile applications using React Native. Work on products used by millions of users worldwide."
+      },
+      {
+        company: "WebFlow Agency",
+        title: "Web Designer & Developer",
+        meta: "Los Angeles, CA • Part-time • $80,000 - $120,000",
+        desc: "Create stunning web experiences for high-profile clients. Must have portfolio and experience with modern web design trends."
+      },
+      {
+        company: "DataViz Solutions",
+        title: "Data Visualization Specialist",
+        meta: "Boston, MA • Full-time • $125,000 - $165,000",
+        desc: "Transform complex data into compelling visualizations. Required skills: D3.js, React, and strong analytical thinking."
+      },
+      {
+        company: "CloudFirst Inc",
+        title: "Backend Developer",
+        meta: "Seattle, WA • Full-time • $140,000 - $190,000",
+        desc: "Design and maintain scalable backend systems using Python and AWS. Work with modern DevOps practices and cloud infrastructure."
+      },
+      {
+        company: "Innovation Labs",
+        title: "UI/UX Engineer",
+        meta: "Austin, TX • Full-time • $110,000 - $150,000",
+        desc: "Create beautiful and functional user interfaces for our suite of products. Strong design skills and frontend development expertise required."
+      },
+      {
+        company: "MegaCorp Solutions",
+        title: "JavaScript Developer",
+        meta: "New York, NY • Full-time • $130,000 - $170,000",
+        desc: "Build enterprise applications with JavaScript and modern frameworks. We offer competitive compensation and growth opportunities."
+      },
+      {
+        company: "StartupXYZ",
+        title: "Full Stack Engineer",
+        meta: "Remote • Full-time • $120,000 - $160,000",
+        desc: "Join our fast-growing startup and work on our core platform. Experience with Node.js and React required."
+      },
+      {
+        company: "TechCorp Industries",
+        title: "Senior Frontend Developer",
+        meta: "San Francisco, CA • Full-time • $130,000 - $175,000",
+        desc: "Build scalable web applications using React and TypeScript. Work with a talented team on cutting-edge projects."
+      }
+    ];
+
+    const postContainer = document.getElementById("post-container");
+    const tpl = document.getElementById("jobCardTemplate");
+
+    jobs.forEach((job) => {
+      const node = tpl.content.cloneNode(true);
+      node.querySelector(".company-name").textContent = job.company;
+      node.querySelector(".job-title").textContent = job.title;
+      node.querySelector(".job-meta").textContent = job.meta;
+      node.querySelector(".job-desc").textContent = job.desc;
+      postContainer.appendChild(node);
+    });
+  </script>
+</body>
+</html>
